@@ -1,13 +1,20 @@
 const OPTIONS = ["rock","paper","scissors"];
-
-function getPlayerChoice() {
-    let choice = prompt("Choose!").toLowerCase();
-    return choice;
-}
+let playerOptions = document.querySelectorAll(".choice-button");
+let resetBtn = document.querySelector(".reset");
+let playerChoice = "";
+let playerCounter = 0;
+let computerCounter = 0;
 
 function getComputerChoice() {
     let choice = OPTIONS[Math.floor(Math.random() * 3)];
     return choice;
+}
+
+function changeScore(user, score){
+    if (user === "player") playerCounter = score;
+    else if (user === "computer") computerCounter = score;
+    let userScore = document.querySelector(`#${user} span`);
+    userScore.innerText = score;
 }
 
 function playRound(playerSelection, computerSelection) {
@@ -26,11 +33,11 @@ function playRound(playerSelection, computerSelection) {
             if (computerSelection == "rock") {
                 winner = "player"
             } else if (computerSelection == "paper") {
-                winner = "tie"
-            } else if (computerSelection == "scissors") {
-                winner = "computer"
-            }
-            break;
+            winner = "tie"
+        } else if (computerSelection == "scissors") {
+            winner = "computer"
+        }
+        break;
         case "scissors":
             if (computerSelection == "rock") {
                 winner = "computer"
@@ -41,35 +48,42 @@ function playRound(playerSelection, computerSelection) {
             }
             break;
         default:
+            console.log("Input error");
             break;
     }
 
+    if (winner == "player")  {
+        if (!(playerCounter >= 5)) changeScore(winner, playerCounter + 1);
+        changeDisplay("Player wins this round!");
+    }
+    else if (winner == "computer") {
+        if (!(computerCounter >= 5)) changeScore(winner, computerCounter + 1);
+        changeDisplay("Computer wins this round!");
+    }
+    else changeDisplay("Tie!")
+
     return winner;
 }
-
-function game() {
-    let playerCounter = 0;
-    let computerCounter = 0;
-    for (let i = 0; i <= 5; i++) {
-        let winner = playRound(getPlayerChoice(), getComputerChoice())
-        if (winner == "player") {
-            console.log("Player wins this round!")
-            playerCounter++;
-        } else if (winner == "computer") {
-            console.log("Computer wins this round!")
-            computerCounter++;
-        } else console.log("Tie!")
-        if (i < 5) {
-            console.log(`Rounds left: ${4 - i}`);
-        }
-    }
-    if (playerCounter > computerCounter) {
-        console.log("Player wins the game!");        
-    } else if (playerCounter < computerCounter) {
-        console.log("Computer wins the game!");        
-    } else if (playerCounter == computerCounter) {
-        console.log("Tie game!");
-    }
+            
+function changeDisplay(text){
+    let currentDisplay = document.querySelector(`.display`);
+    currentDisplay.innerText = text;
 }
 
-game();
+playerOptions.forEach(choice => {
+    choice.addEventListener("click", function eventHandler() {
+        playerChoice = choice.id;
+        choice.classList.add("active");
+        window.setTimeout(() => {
+            choice.classList.remove("active");
+        }, 50);
+        playRound(playerChoice, getComputerChoice());
+        if (playerCounter >= 5 || computerCounter >= 5) {
+            playerOptions.forEach(optionsToRemove => optionsToRemove.removeEventListener("click", eventHandler));
+            if (playerCounter >= 5) changeDisplay("You win!");
+            if (computerCounter >= 5) changeDisplay("Computer wins!");
+        }
+    })
+});
+
+resetBtn.addEventListener('click', () => location.reload())

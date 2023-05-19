@@ -1,0 +1,60 @@
+body {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.button-container {
+    display: flex;
+    gap: 25px;
+}
+
+.choice-button {
+    width: 100px;
+    height: 100px;
+    background-color: transparent;
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: 3px solid black;
+}
+
+.choice-button.active {
+    transform: scale(1.1);
+}
+
+/*.choice-button.active {
+    animation-name: buttonClick;
+    animation-duration: 0.09s;
+}
+@keyframes buttonClick {
+    from {transform: scale(1);}
+    to {transform: scale(1.1);}
+}*/
+
+#rock {
+    background-image: url("rock.png");
+}
+
+#paper {
+    background-image: url("paper.png");
+}
+
+#scissors {
+    background-image: url("scissors.png");
+}
+
+.info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.scores {
+    display: flex;
+    gap: 20px;
+}
